@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "build",
+    "rootDir": "src",
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "paths": {
+      "*": ["src/typings/*"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
+}

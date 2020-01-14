@@ -1,0 +1,193 @@
+swagger: '2.0'
+
+info:
+  version: "1.0"
+  title: "Node Programmer Test"
+
+host: node.example.com
+basePath: /rest/1.0
+
+paths:
+  '/tshirt/{rfid}':
+    put:
+      operationId: registerTshirt
+      description: |
+        This service is called once for each T-shirt when a RFID tag is sewn into it. It
+        will register the RFID tag to the database and assign it last location of Manufacturing.
+      parameters:
+        - name: rfid
+          in: path
+          required: true
+          type: string
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/RegisterTshirtRequest'
+      responses:
+        200:
+          description: Information about the t-shirt
+          schema:
+            $ref: '#/definitions/TshirtDto'
+    get:
+      operationId: getTshirt
+      description: |
+        Operation to be called when one wants details of a t-shirt by it's rfid tag.
+      parameters:
+        - name: rfid
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Information about the t-shirt
+          schema:
+            $ref: '#/definitions/TshirtDto'
+
+  '/tshirt/{rfid}/history':
+    get:
+      operationId: getTshirtLocationHistory
+      description: |
+        Operation to be called when one wants details of when was a particular t-shirt and when.
+      parameters:
+        - name: rfid
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Information about the t-shirt historical location
+          schema:
+            $ref: '#/definitions/TshirtDto'
+
+  '/box/{rfid}':
+    put:
+      operationId: registerBox
+      description: |
+        This service is called when a box is packed with t-shirts inside it. The rfid in the 
+        query is the RFID attached to the box.
+      parameters:
+        - name: rfid
+          in: path
+          required: true
+          type: string
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/RegisterBoxRequest'
+      responses:
+        200:
+          description: Information about the box
+          schema:
+            $ref: '#/definitions/BoxDto'
+    get:
+      operationId: getBox
+      description: |
+        Operation to be called when one wants details of a box by it's RFID tag
+      parameters:
+        - name: rfid
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Information about the box
+          schema:
+            $ref: '#/definitions/BoxDto'
+
+  '/rfid/{rfid}':
+    post:
+      operationId: trackRfid
+      description: |
+        Operation called when a RFID tag passes a scanning location. It can be a box or
+        a t-shirt.
+      parameters:
+        - name: rfid
+          in: path
+          required: true
+          type: string
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TrackRfidRequest'
+      responses:
+        204:
+          description: Success, no information is sent back
+
+definitions:
+  RegisterTshirtRequest:
+    type: object
+    properties:
+      color:
+        type: string
+      size:
+        type: string
+      label:
+        type: string
+    required:
+      - color
+      - size
+      - label
+
+  TrackRfidRequest:
+    type: object
+    properties:
+      lastLocation:
+        type: string
+    required:
+      - lastLocation
+
+  TshirtDto:
+    properties:
+      color:
+        type: string
+      size:
+        type: string
+      label:
+        type: string
+      rfid:
+        type: string
+      lastLocation:
+        type: string
+      pastLocations:
+        type: array
+        items:
+          $ref: '#/definitions/TshirtLocationDto'
+    required:
+      - color
+      - size
+      - label
+      - rfid
+      - lastLocation
+
+  TshirtLocationDto:
+    properties:
+      timestamp:
+        type: string
+        format: date-time
+      location:
+        type: string
+    required:
+      - timestamp
+      - location
+
+  RegisterBoxRequest:
+    properties:
+      tshirtRfids:
+        type: array
+        items:
+          type: string
+    required:
+      - tshirtRfids
+
+  BoxDto:
+    properties:
+      tshirtRfids:
+        type: array
+        items:
+          type: string
+    required:
+      - tshirtRfids
+

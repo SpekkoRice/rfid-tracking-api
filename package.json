@@ -1,0 +1,111 @@
+{
+  "name": "rfid-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpekkoRice/rfid-tracking-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SpekkoRice/rfid-tracking-api/issues"
+  },
+  "homepage": "https://github.com/SpekkoRice/rfid-tracking-api#readme",
+  "dependencies": {
+    "@koa/cors": "^2.2.2",
+    "@types/bcrypt": "^2.0.0",
+    "@types/chai": "^4.1.4",
+    "@types/chai-http": "^3.0.5",
+    "@types/debug": "0.0.30",
+    "@types/http-errors": "^1.6.1",
+    "@types/koa": "^2.0.46",
+    "@types/koa-mount": "^3.0.1",
+    "@types/koa-router": "^7.0.31",
+    "@types/koa-session": "^5.7.4",
+    "@types/koa-views": "^2.0.3",
+    "@types/lodash": "^4.14.116",
+    "@types/mocha": "^5.2.5",
+    "@types/moment-timezone": "^0.5.10",
+    "@types/mongodb": "^3.1.14",
+    "@types/mongoose": "^5.3.15",
+    "@types/qs": "^6.5.1",
+    "@types/request-promise": "^4.1.42",
+    "@types/requestretry": "^1.12.4",
+    "@types/sinon": "^5.0.1",
+    "chai": "^4.1.2",
+    "chai-http": "^4.2.0",
+    "chai-mongo-doc": "^0.1.3",
+    "debug": "^3.1.0",
+    "http-errors": "^1.7.1",
+    "koa": "^2.5.2",
+    "koa-better-body": "^3.0.4",
+    "koa-convert": "^1.2.0",
+    "koa-mount": "^3.0.0",
+    "koa-router": "^7.4.0",
+    "koa-session": "^5.8.2",
+    "koa-views": "^6.1.5",
+    "mocha": "^5.2.0",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.23",
+    "mongodb": "^3.1.10",
+    "mongoose": "^5.4.3",
+    "puppeteer": "^1.12.2",
+    "qs": "^6.6.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
+    "requestretry": "^4.0.0",
+    "sinon": "^6.1.5",
+    "ts-simple-ast": "^13.0.0",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.19",
+    "codecov": "^3.1.0",
+    "istanbul": "^0.4.5",
+    "mongodb-memory-server": "^2.7.4",
+    "nodemon": "^1.18.7",
+    "nyc": "^13.3.0",
+    "ts-node": "^7.0.1"
+  },
+  "config": {
+    "mongodbMemoryServer": {
+      "platform": "linux",
+      "arch": "x64",
+      "version": "4.0.0",
+      "debug": "1",
+      "disablePostinstall": "1",
+      "md5Check": "1"
+    }
+  },
+  "nodemonConfig": {
+    "delay": "2500",
+    "watch": [
+      "src"
+    ],
+    "ext": "ts",
+    "ignore": [
+      "src/**/*.spec.ts"
+    ],
+    "exec": "bash -c 'rm -rf ./build/* && tsc && export $(grep -v '^#' .env | xargs) && node ./build/app.js'"
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.spec.js",
+      "**/tests/**/*.js"
+    ]
+  },
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon",
+    "pretest": "rm -rf ./build/* && tsc",
+    "test-unit": "npm run pretest && bash -c 'export $(grep -v '^#' .env.test | xargs) && nyc --reporter=text mocha --require source-map-support/register \"./build/**/*.spec.js\" --timeout=5000 --exit'",
+    "test-e2e": "npm run pretest && bash -c 'export $(grep -v '^#' .env.test | xargs) && nyc --reporter=text mocha --require source-map-support/register \"./build/tests/**/*.js\" --exit'",
+    "test": "npm run test-unit && npm run test-e2e",
+    "test-watch": "TS_NODE_FILES=true mocha -r ts-node/register ./src/**/*.spec.ts -w",
+    "coverage-unit": "npm run test-unit && nyc report --reporter=text-lcov > coverage.lcov && codecov -C -F unittests",
+    "coverage-e2e": "npm run test-e2e && nyc report --reporter=text-lcov > coverage.lcov && codecov -C -F end2end",
+    "coverage": "npm run coverage-unit && npm run coverage-e2e"
+  }
+}
