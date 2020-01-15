@@ -5,6 +5,9 @@ import * as convert from "koa-convert";
 import * as mount from "koa-mount";
 import * as mongoose from "mongoose";
 import { Server } from "http";
+import {router as tShirtRoutes}  from "./routes/tshirts";
+import {router as boxRoutes}  from "./routes/box";
+import {router as rfidRoutes}  from "./routes/rfid";
 
 let app: Koa;
 
@@ -34,11 +37,15 @@ export const main = async () => {
   app.use(convert(cors({credentials: true})));
   app.keys = ['super-secret-key'];
   app.use(convert(koaBetterBody({fields: "body"})));
-  app.use(async (ctx, next) => {
-    ctx.session.visits = ctx.session.visits ? ctx.session.visits + 1 : 1;
-    await next();
-    return;
-  });
+
+  app.use(mount("/", tShirtRoutes.allowedMethods()));
+  app.use(mount("/", tShirtRoutes.routes()));
+
+  app.use(mount("/", boxRoutes.allowedMethods()));
+  app.use(mount("/", boxRoutes.routes()));
+
+  app.use(mount("/", rfidRoutes.allowedMethods()));
+  app.use(mount("/", rfidRoutes.routes()));
 
   server = app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}`);
