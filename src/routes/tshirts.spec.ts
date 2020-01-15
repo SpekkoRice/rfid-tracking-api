@@ -7,6 +7,7 @@ import * as mongoose from "mongoose";
 import * as _ from "lodash";
 import * as sinon from  "sinon";
 import * as app from "../app";
+import * as TShirts from "../models/tshirts";
 
 process.env.NODE_ENV = "test";
 
@@ -64,21 +65,43 @@ describe("API: tshirts", function() {
     });
 
     it("should return tshirt by rfid", async function() {
+      const ll = await TShirts.tshirtsLocationMongooseModel.create({location: 'Manufacturing'});
+      await TShirts.tshirtsMongooseModel.create({
+        pastLocations: [ll._id],
+        rfid: '123',
+        color: 'blue',
+        label: 'nike-t-shirt',
+        lastLocation: ll._id,
+        size: 'xl',
+      });
       const agent = chai.request.agent(app.server);
       return agent
-        .get("/tshirt/1")
+        .get("/tshirt/123")
         .then((res) => {
           assert.exists(res.body);
+          assert.exists(res.body._id);
+          assert.equal(res.body.rfid, '123');
           assert.equal(res.status, 200);
       });
     });
 
     it("should return tshirt and tshirt history by rfid", async function() {
+      const ll = await TShirts.tshirtsLocationMongooseModel.create({location: 'Manufacturing'});
+      await TShirts.tshirtsMongooseModel.create({
+        pastLocations: [ll._id],
+        rfid: '123',
+        color: 'blue',
+        label: 'nike-t-shirt',
+        lastLocation: ll._id,
+        size: 'xl',
+      });
       const agent = chai.request.agent(app.server);
       return agent
-        .get("/tshirt/1/history")
+        .get("/tshirt/123/history")
         .then((res) => {
           assert.exists(res.body);
+          assert.exists(res.body._id);
+          assert.equal(res.body.rfid, '123');
           assert.equal(res.status, 200);
       });
     });
@@ -101,9 +124,16 @@ describe("API: tshirts", function() {
     it("should add rfid tag to tshirt successfully", async function() {
       const agent = chai.request.agent(app.server);
       return agent
-        .put("/tshirt/1")
+        .put("/tshirt/123")
+        .send({
+          color: 'blue',
+          label: 'nike-t-shirt',
+          size: 'xl',
+        })
         .then((res) => {
           assert.exists(res.body);
+          assert.exists(res.body._id);
+          assert.equal(res.body.rfid, '123');
           assert.equal(res.status, 200);
       });
     });
