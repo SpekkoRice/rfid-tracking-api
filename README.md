@@ -20,6 +20,7 @@
  > Lodash: Lodash, no javascript developer should ever develop without it, it's a nice utility library.
  > Chai HTTP: This makes HTTP integration testing much easier, I've never had the need to use another library for this.
  > Mocha: This is just my testing framework of choice, I don't have any technical reasons why I prefer this library, I've just been using it for long and haven't had the need to switch.
+ > Mongoose: Because it allows me to define schema's and prevent me from poluting my mongodb collections.
 
  2. How do you handle transactions?
  > I'm not entirely sure what is meant by "handle" transactions, without the context of a use case.
@@ -30,8 +31,10 @@
 
  3. What would be your preferred method of hosting the server?
  > If it were this API for this assessment, I would prefer using something like apex up. https://apex.sh/docs/up/, which is a serveless approach.
- > I believe the method of hosting is determined mostly by the application, whether you go serverless or you use containers is an architectural decision 
+ > I believe the method of hosting is determined mostly by the application, whether you go serverless or for example use containers is an architectural decision 
  > and in my opinion not up to personal preference.
+ > Similarly where you host is also determined by your application e.g. if you're building an application or service around aws tools you would need to host with aws, 
+ > if you're building an application / service for a local target market, depending on the latency or bandwidth your application uses, you might opt for a local servivce / hosting provider.
 
  4. How do you approach logging in Node?
  > Usually I'd use a logging library (something like winston) to add timestamps and log levels to my log outputs.
