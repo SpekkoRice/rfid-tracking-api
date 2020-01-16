@@ -12,7 +12,7 @@ export const boxSchema = new mongoose.Schema({
   rfid: {
     type: String,
     required: true,
-    index: true,
+    unique: true,
   }
 }, {toObject: { virtuals: true }, toJSON: { virtuals: true }});
 

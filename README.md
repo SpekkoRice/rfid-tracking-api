@@ -9,3 +9,37 @@
 
 ## Helpful stuff
  - `docker run --rm -p 127.0.0.1:27017:27017 --name mongo-layup -d mongo:4.0` to run the mongodb 4.0 in a docker container
+
+## Additional Questions
+ 1. Describe your solution in a few words (expect an experienced programmer reading it) and describe your choice of libraries and/or patterns.
+ > Well the API was already defined in the swagger.yaml provided, so the approach I took was a relationship-esq structure within mongodb
+ > Making use of populate to easily grab related data.
+ > The idea for boxes & locations to have their own database entries was to provide another starting point if you were to run any aggregation,
+ > models would then be assorted logically and aggregation can then be run using indexed fields as opposed to deconstrcucting array fields.
+ > Libraries & Reasons:
+ > KOAJS: I personally like KoaJS and how lightweight and "unopinionated" it is.
+ > Lodash: Lodash, no javascript developer should ever develop without it, it's a nice utility library.
+ > Chai HTTP: This makes HTTP integration testing much easier, I've never had the need to use another library for this.
+ > Mocha: This is just my testing framework of choice, I don't have any technical reasons why I prefer this library, I've just been using it for long and haven't had the need to switch.
+
+ 2. How do you handle transactions?
+ > I'm not entirely sure what is meant by "handle" transactions, without the context of a use case.
+ > Assuming it's within the mongodb space, all single document operations within mongodb is atomic, making the use of traditional transaction within this context moot.
+ > So if there was a collection that would require transact like opertations, I would structure my models around using single document read/writes.
+ > If using atomic single document operations wasn't an option, MongoDB 4.0 released a transaction API.
+ > This allows for a more traditional approach with things like start_transaction and commit on multi document read/writes.
+
+ 3. What would be your preferred method of hosting the server?
+ > I would prefer using something like apex up. https://apex.sh/docs/up/, which is a serveless approach
+
+ 4. How do you approach logging in Node?
+ > Usually I'd use a logging library (something like winston) to add timestamps and log levels to my log outputs
+ > Some process managers like pm2 already write log outputs to files, if nothing is already doing that, I'd write the logs to a file.
+ > Put these files on a log rotation (winston does this already)
+ > For production environments only log critical things like crashes and negate noisy logs like database duplicate indexes.
+ > For dev environments log everything.
+
+ 5. What is an event loop in Node and how does it interact with asynchronous tasks?
+ > The event loop is a process by which node lets the system run certain operations to bypass JavaScript's single threaded nature and perform non-blocking I/O operations.
+ > I wouldn't say it interacts with an asynchronous task, more that it allows a task to happen asynchronously.
+ > In short, the event loop polls the system for any scheduled / pending callbacks, if all tasks are complete it closes.

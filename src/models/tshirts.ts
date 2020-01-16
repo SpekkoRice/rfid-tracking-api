@@ -24,7 +24,7 @@ export const tshirtsLocationSchema = new mongoose.Schema({
   location: {
     type: String,
     required: true,
-    index: true,
+    unique: true,
   },
   timestamp: {
     type: Date,
@@ -48,7 +48,7 @@ export const tshirtsSchema = new mongoose.Schema({
   rfid: {
     type: String,
     required: true,
-    index: true,
+    unique: true,
   },
   lastLocation: {
     type: mongoose.Types.ObjectId,
