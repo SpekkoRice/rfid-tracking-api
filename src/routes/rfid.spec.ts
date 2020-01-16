@@ -91,9 +91,16 @@ describe("API: rfid", function() {
       return agent
         .post(`/rfid/${boxRfid}`)
         .send({lastLocation: "My House"})
-        .then((res) => {
+        .then(async (res) => {
+          const lll = await TShirts.tshirtsLocationMongooseModel.findOne({location: 'My House'}).exec();
+          const tshirts = await TShirts.tshirtsMongooseModel.find().exec();
+          _.each(tshirts, (shirt) => {
+            assert.equal(shirt.pastLocations.length, 2);
+            assert.equal(shirt.lastLocation.toHexString(), lll._id.toHexString());
+          });
           assert.isEmpty(res.body);
           assert.equal(res.status, 204);
+          return;
       });
     });
 
@@ -111,9 +118,16 @@ describe("API: rfid", function() {
       return agent
         .post(`/rfid/${createdShirt.rfid}`)
         .send({lastLocation: "My House"})
-        .then((res) => {
+        .then(async (res) => {
+          const lll = await TShirts.tshirtsLocationMongooseModel.findOne({location: 'My House'}).exec();
+          const tshirts = await TShirts.tshirtsMongooseModel.find().exec();
+          _.each(tshirts, (shirt) => {
+            assert.equal(shirt.pastLocations.length, 2);
+            assert.equal(shirt.lastLocation.toHexString(), lll._id.toHexString());
+          });
           assert.isEmpty(res.body);
           assert.equal(res.status, 204);
+          return;
       });
     });
   });
