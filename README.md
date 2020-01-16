@@ -51,7 +51,7 @@
  > try catch throw?
  > I'm not sure what you mean.
  > In certain cases an error that causes a hard crash is necessary to bring attention to the issue.
- > In most cases catching errors and the logging them is the appropriate course of action.
+ > In most cases catching errors and then logging them is the appropriate course of action.
  
  7. How do you prefer to receive configuration?
  > I don't have a preference when it comes to this.
