@@ -23,7 +23,7 @@
 
  2. How do you handle transactions?
  > I'm not entirely sure what is meant by "handle" transactions, without the context of a use case.
- > Assuming it's within the mongodb space, all single document operations within mongodb is atomic, making the use of traditional transaction within this context moot.
+ > Assuming it's within the mongodb space, all single document operations within mongodb are atomic, making the use of a traditional transaction within this context moot.
  > So if there was a collection that would require transact like opertations, I would structure my models around using single document read/writes.
  > If using atomic single document operations wasn't an option, MongoDB 4.0 released a transaction API.
  > This allows for a more traditional approach with things like start_transaction and commit on multi document read/writes.
@@ -49,4 +49,8 @@
  > In most cases catching errors and the logging them is the appropriate course of action.
  
  7. How do you prefer to receive configuration?
- > What configuration?
+ > I don't have a preference when it comes to this.
+ > Things like CircleCI, PM2 all have their own ways of loading environment variables into your applications runtime.
+ > When developing, I like using a barebones approach adding environment variables into my runtime using bash.
+ > I've used libaries like dot env before and it really makes no difference to me, as long as the values are in there I'm happy.
+ 
