@@ -29,7 +29,9 @@
  > This allows for a more traditional approach with things like start_transaction and commit on multi document read/writes.
 
  3. What would be your preferred method of hosting the server?
- > I would prefer using something like apex up. https://apex.sh/docs/up/, which is a serveless approach.
+ > If it were this API for this assessment, I would prefer using something like apex up. https://apex.sh/docs/up/, which is a serveless approach.
+ > I believe the method of hosting is determined mostly by the application, whether you go serverless or you use containers is an architectural decision 
+ > and in my opinion not up to personal preference.
 
  4. How do you approach logging in Node?
  > Usually I'd use a logging library (something like winston) to add timestamps and log levels to my log outputs.
@@ -53,4 +55,3 @@
  > Things like CircleCI, PM2 all have their own ways of loading environment variables into your applications runtime.
  > When developing, I like using a barebones approach adding environment variables into my runtime using bash.
  > I've used libaries like dot env before and it really makes no difference to me, as long as the values are in there I'm happy.
- 
