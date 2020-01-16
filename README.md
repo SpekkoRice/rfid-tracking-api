@@ -41,5 +41,14 @@
 
  5. What is an event loop in Node and how does it interact with asynchronous tasks?
  > The event loop is a process by which node lets the system run certain operations to bypass JavaScript's single threaded nature and perform non-blocking I/O operations.
- > I wouldn't say it interacts with an asynchronous task, more that it allows a task to happen asynchronously.
- > In short, the event loop polls the system for any scheduled / pending callbacks, if all tasks are complete it closes.
+ > When javascript notices an async call or something needs to happen asynchronously it will hand over control to the event loop.
+ > With that being said, I wouldn't say that the event loop interacts with asynchronous tasks, rather it allows tasks to happen asynchronously.
+
+ 6. How do you handle errors?
+ > try catch throw?
+ > I'm not sure what you mean.
+ > In certain cases an error that causes a hard crash is necessary to bring attention to the issue.
+ > In most cases catching errors and the logging them is the appropriate course of action.
+ 
+ 7. How do you prefer to receive configuration?
+ > What configuration?
