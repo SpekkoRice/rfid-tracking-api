@@ -9,13 +9,13 @@ router.post("/rfid/:rfid", async (ctx) => {
   try {
     const box = await Box.getByRfid(rfid);
     if (box) {
-      TShirts.updateLocationByBox(data.lastLocation, rfid);
+      await TShirts.updateLocationByBox(data.lastLocation, rfid);
     } else {
-      TShirts.updateLocation(data.lastLocation, rfid);
+      await TShirts.updateLocation(data.lastLocation, rfid);
     }
-    ctx.status = 204;
+    return ctx.status = 204;
   } catch (e) {
-    ctx.body = 400
+    ctx.status = 400
     // Could return some error stuff here
   }
 });

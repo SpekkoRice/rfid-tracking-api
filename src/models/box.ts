@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import * as TShirts from "./tshirts";
 import * as mongoose from "mongoose";
 
 export interface IBox extends mongoose.Document {
@@ -32,9 +33,21 @@ export const createBox = async (rfid: string) => {
 
 export const getByRfid = async (rfid: string) => {
   const box = await Box.findOne({rfid}).populate('tshirtRfids').exec();
-  const oBox = box.toObject();
-  const rfids = box.tshirtRfids.map((t:any) => t.rfid);
-  oBox.tshirtRfids = rfids;
-  return oBox;
+  try {
+    const oBox = box.toObject();
+    const rfids = box.tshirtRfids.map((t:any) => t.rfid);
+    oBox.tshirtRfids = rfids;
+    return oBox;
+  } catch (e) {
+    return null;
+  } 
 }
 
+export const addBoxIdToTShirts = async (boxId: string | mongoose.Types.ObjectId, rfids: string[]) => {
+  if (!rfids || rfids.length <= 0) return [];
+  const tshirtUpdates = [];
+  _.each(rfids, (rfid) => {
+    tshirtUpdates.push(TShirts.addTshirtToBox(rfid, boxId));
+  });
+  return Promise.all(tshirtUpdates);
+}

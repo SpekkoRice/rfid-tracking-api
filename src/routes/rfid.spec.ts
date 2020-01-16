@@ -7,6 +7,8 @@ import * as mongoose from "mongoose";
 import * as _ from "lodash";
 import * as sinon from  "sinon";
 import * as app from "../app";
+import * as Box from "../models/box";
+import * as TShirts from "../models/tshirts";
 
 process.env.NODE_ENV = "test";
 
@@ -63,13 +65,55 @@ describe("API: rfid", function() {
       this.sandbox.restore();
     });
 
-    it("should successfully tag something with a location payload", async function() {
+    it("should successfully tag a tshirt with a location payload using box rfid", async function() {
+      const boxRfid = "098";
+      const box = await Box.boxMongooseModel.create({rfid: boxRfid});
+      const ll = await TShirts.tshirtsLocationMongooseModel.create({location: 'Manufacturing'});
+      await TShirts.tshirtsMongooseModel.create({
+        pastLocations: [ll._id],
+        rfid: '567',
+        color: 'blue',
+        label: 'nike-t-shirt',
+        lastLocation: ll._id,
+        size: 'xl',
+        boxId: box._id,
+      });
+      await TShirts.tshirtsMongooseModel.create({
+        pastLocations: [ll._id],
+        rfid: '123',
+        color: 'blue',
+        label: 'nike-t-shirt',
+        lastLocation: ll._id,
+        size: 'xl',
+        boxId: box._id,
+      });
       const agent = chai.request.agent(app.server);
       return agent
-        .post("/rfid/1")
+        .post(`/rfid/${boxRfid}`)
+        .send({lastLocation: "My House"})
         .then((res) => {
-          assert.exists(res.body);
-          assert.equal(res.status, 200);
+          assert.isEmpty(res.body);
+          assert.equal(res.status, 204);
+      });
+    });
+
+    it("should successfully tag a tshirt with a location payload", async function() {
+      const ll = await TShirts.tshirtsLocationMongooseModel.create({location: 'Manufacturing'});
+      const createdShirt = await TShirts.tshirtsMongooseModel.create({
+        pastLocations: [ll._id],
+        rfid: '567',
+        color: 'blue',
+        label: 'nike-t-shirt',
+        lastLocation: ll._id,
+        size: 'xl',
+      });
+      const agent = chai.request.agent(app.server);
+      return agent
+        .post(`/rfid/${createdShirt.rfid}`)
+        .send({lastLocation: "My House"})
+        .then((res) => {
+          assert.isEmpty(res.body);
+          assert.equal(res.status, 204);
       });
     });
   });

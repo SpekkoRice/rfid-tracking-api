@@ -109,3 +109,6 @@ export const getTshirtByRfid = async (rfid: string) => {
   return await Tshirts.findOne({rfid: rfid}).populate('pastLocations').exec();
 };
 
+export const addTshirtToBox = async (rfid: string, boxId: string | mongoose.Types.ObjectId) => {
+  return await Tshirts.findOneAndUpdate({rfid}, {boxId: boxId}, {new: true}).exec();
+}

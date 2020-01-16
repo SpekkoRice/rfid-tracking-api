@@ -8,6 +8,9 @@ import * as _ from "lodash";
 import * as sinon from  "sinon";
 import * as app from "../app";
 
+import * as Box from "../models/box";
+import * as TShirts from "../models/tshirts";
+
 process.env.NODE_ENV = "test";
 
 const assert = chai.assert;
@@ -21,7 +24,7 @@ class ContextEx extends mocha.Context {
   sandbox: sinon.SinonSandbox;
 }
 
-describe("API: rfid", function() {
+describe("API: box", function() {
 
   before(async function(this: ContextEx) {
     chai.use(require("chai-http"));
@@ -64,12 +67,35 @@ describe("API: rfid", function() {
     });
 
     it("should retreive all tshirt rfids associated to box rfid", async function() {
+      const boxRfid = "098";
+      const box = await Box.boxMongooseModel.create({rfid: boxRfid});
+      const ll = await TShirts.tshirtsLocationMongooseModel.create({location: 'Manufacturing'});
+      await TShirts.tshirtsMongooseModel.create({
+        pastLocations: [ll._id],
+        rfid: '567',
+        color: 'blue',
+        label: 'nike-t-shirt',
+        lastLocation: ll._id,
+        size: 'xl',
+        boxId: box._id,
+      });
+      await TShirts.tshirtsMongooseModel.create({
+        pastLocations: [ll._id],
+        rfid: '123',
+        color: 'blue',
+        label: 'nike-t-shirt',
+        lastLocation: ll._id,
+        size: 'xl',
+        boxId: box._id,
+      });
+
       const agent = chai.request.agent(app.server);
       return agent
-        .get("/box/1")
+        .get(`/box/${boxRfid}`)
         .then((res) => {
           assert.exists(res.body);
           assert.equal(res.status, 200);
+          assert.equal(res.body.tshirtRfids.length, 2);
       });
     });
   });
@@ -89,12 +115,34 @@ describe("API: rfid", function() {
     });
 
     it("should add all tshirts into box successfully", async function() {
+      const boxRfid = "098";
+      const ll = await TShirts.tshirtsLocationMongooseModel.create({location: 'Manufacturing'});
+      await TShirts.tshirtsMongooseModel.create({
+        pastLocations: [ll._id],
+        rfid: '567',
+        color: 'blue',
+        label: 'nike-t-shirt',
+        lastLocation: ll._id,
+        size: 'xl',
+      });
+      await TShirts.tshirtsMongooseModel.create({
+        pastLocations: [ll._id],
+        rfid: '123',
+        color: 'blue',
+        label: 'nike-t-shirt',
+        lastLocation: ll._id,
+        size: 'xl',
+      });
       const agent = chai.request.agent(app.server);
       return agent
-        .put("/box/1")
+        .put(`/box/${boxRfid}`)
+        .send({
+          tshirtRfids: ['123','567']
+        })
         .then((res) => {
           assert.exists(res.body);
           assert.equal(res.status, 200);
+          assert.equal(res.body.tshirtRfids.length, 2);
       });
     });
   });
