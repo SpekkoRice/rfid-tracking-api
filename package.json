@@ -53,7 +53,7 @@
     "qs": "^6.6.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "requestretry": "^4.0.0",
+    "requestretry": "^7.0.0",
     "sinon": "^6.1.5",
     "ts-simple-ast": "^13.0.0",
     "typedoc": "^0.14.2",
