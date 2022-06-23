@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@types/node": "^10.12.19",
-    "codecov": "^3.1.0",
+    "codecov": "^3.8.3",
     "istanbul": "^0.4.5",
     "mongodb-memory-server": "^2.7.4",
     "nodemon": "^1.18.7",
