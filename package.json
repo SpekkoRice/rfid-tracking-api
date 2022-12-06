@@ -50,7 +50,7 @@
     "moment-timezone": "^0.5.23",
     "mongodb": "^3.1.10",
     "mongoose": "^5.4.3",
-    "qs": "^6.6.0",
+    "qs": "^6.9.7",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "requestretry": "^4.0.0",
